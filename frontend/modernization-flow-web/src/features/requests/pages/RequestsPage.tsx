@@ -1,4 +1,26 @@
+import { Link } from 'react-router-dom'
 import { useRequests } from '../api/useRequests'
+import './RequestsPage.css'
+
+function formatAmount(amount: number) {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(amount)
+}
+
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  }).format(new Date(date))
+}
+
+function getStatusClass(status: string) {
+  return `status-badge status-badge--${status
+    .replace(/\s+/g, '-')
+    .toLowerCase()}`
+}
 
 export function RequestsPage() {
   const {
@@ -9,51 +31,71 @@ export function RequestsPage() {
   } = useRequests()
 
   if (isLoading) {
-    return <p>Loading requests...</p>
+    return <p>Carregando Solicitações...</p>
   }
 
   if (isError) {
     return (
       <p>
-        Error loading requests:{' '}
+        Erro ao carregar solicitações:{' '}
         {error instanceof Error ? error.message : 'Unknown error'}
       </p>
     )
   }
 
   if (!requests || requests.length === 0) {
-    return <p>No requests found.</p>
+    return <p>Sem solicitações por enquanto.</p>
   }
 
   return (
-    <main>
-      <h1>Requests</h1>
+    <section className="requests-page">
+      <div className="requests-page__header">
+        <h1 className="requests-page__title">Solicitações</h1>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Created At</th>
-          </tr>
-        </thead>
+        <Link
+          to="/requests/new"
+          className="requests-page__new-button"
+        >
+          Nova Solicitação
+        </Link>
+      </div>
 
-        <tbody>
-          {requests.map((request) => (
-            <tr key={request.id}>
-              <td>{request.title}</td>
-              <td>{request.description}</td>
-              <td>{request.amount}</td>
-              <td>{request.status}</td>
-              <td>
-                {new Date(request.createdAt).toLocaleString('pt-BR')}
-              </td>
+      <div className="requests-table-wrapper">
+        <table className="requests-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th>Data de Criação</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </main>
+          </thead>
+
+          <tbody>
+            {requests.map((request) => (
+              <tr key={request.id}>
+                <td>{request.title}</td>
+                <td>{request.description}</td>
+
+                <td className="requests-table__amount">
+                  {formatAmount(request.amount)}
+                </td>
+
+                <td>
+                  <span className={getStatusClass(request.status)}>
+                    {request.status}
+                  </span>
+                </td>
+
+                <td className="requests-table__date">
+                  {formatDate(request.createdAt)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   )
 }

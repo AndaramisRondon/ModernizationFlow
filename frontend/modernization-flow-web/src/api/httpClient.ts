@@ -8,12 +8,15 @@ async function request<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<T> {
+  const headers = new Headers(options.headers)
+
+  if (options.body) {
+    headers.set('Content-Type', 'application/json')
+  }
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers,
   })
 
   if (!response.ok) {
@@ -28,7 +31,6 @@ async function request<T>(
 
   return response.json() as Promise<T>
 }
-
 export const httpClient = {
   get<T>(endpoint: string) {
     return request<T>(endpoint)
