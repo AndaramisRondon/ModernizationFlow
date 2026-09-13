@@ -1,12 +1,12 @@
-﻿using System;
+﻿using ModernizationFlow.Application.Common;
+using ModernizationFlow.Application.Interfaces;
+using ModernizationFlow.Application.Requests.Common;
+using ModernizationFlow.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using ModernizationFlow.Application.Common;
-using ModernizationFlow.Application.Interfaces;
-using ModernizationFlow.Domain.Entities;
 
 namespace ModernizationFlow.Application.Requests.GetById;
 
@@ -19,9 +19,9 @@ public sealed class GetRequestByIdHandler
         _repository = repository;
     }
 
-    public async Task<Result<Request>> ExecuteAsync(
-        Guid id,
-        CancellationToken cancellationToken)
+    public async Task<Result<RequestDto>> ExecuteAsync(
+            Guid id,
+            CancellationToken cancellationToken)
     {
         var request = await _repository.GetByIdAsync(
             id,
@@ -29,10 +29,11 @@ public sealed class GetRequestByIdHandler
 
         if (request is null)
         {
-            return Result<Request>.Failure(
+            return Result<RequestDto>.Failure(
                 "Solicitação não encontrada.");
         }
 
-        return Result<Request>.Success(request);
+        return Result<RequestDto>.Success(
+            RequestDto.FromEntity(request));
     }
 }
