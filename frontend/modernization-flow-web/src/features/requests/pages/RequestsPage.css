@@ -56,6 +56,15 @@
   white-space: nowrap;
 }
 
+.requests-table__link {
+  color: #111827;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.requests-table__link:hover {
+  text-decoration: underline;
+}
 .status-badge {
   display: inline-block;
   padding: 4px 10px;

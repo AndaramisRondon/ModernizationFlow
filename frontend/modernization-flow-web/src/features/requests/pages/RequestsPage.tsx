@@ -75,7 +75,15 @@ export function RequestsPage() {
           <tbody>
             {requests.map((request) => (
               <tr key={request.id}>
-                <td>{request.title}</td>
+                {/* <td>{request.title}</td> */}
+                <td>
+                  <Link
+                    to={`/requests/${request.id}`}
+                    className="requests-table__link"
+                  >
+                    {request.title}
+                  </Link>
+                </td>
                 <td>{request.description}</td>
 
                 <td className="requests-table__amount">
