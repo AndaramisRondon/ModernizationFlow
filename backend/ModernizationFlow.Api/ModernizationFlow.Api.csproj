@@ -18,8 +18,4 @@
     <ProjectReference Include="..\ModernizationFlow.Infrastructure\ModernizationFlow.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
