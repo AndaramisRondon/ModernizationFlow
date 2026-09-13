@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernizationFlow.Domain", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernizationFlow.Infrastructure", "..\ModernizationFlow.Infrastructure\ModernizationFlow.Infrastructure.csproj", "{C841F810-48DD-4070-BF6B-7FFFBD3C0E81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernizationFlow.Tests", "..\ModernizationFlow.Tests\ModernizationFlow.Tests.csproj", "{B567FF0C-7E36-47B5-B859-B52DE2962E69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C841F810-48DD-4070-BF6B-7FFFBD3C0E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C841F810-48DD-4070-BF6B-7FFFBD3C0E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C841F810-48DD-4070-BF6B-7FFFBD3C0E81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B567FF0C-7E36-47B5-B859-B52DE2962E69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B567FF0C-7E36-47B5-B859-B52DE2962E69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B567FF0C-7E36-47B5-B859-B52DE2962E69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B567FF0C-7E36-47B5-B859-B52DE2962E69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
