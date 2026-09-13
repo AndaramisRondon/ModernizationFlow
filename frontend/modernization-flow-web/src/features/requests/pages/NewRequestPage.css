@@ -83,3 +83,16 @@
 .request-form__actions button:hover {
   background-color: #374151;
 }
+
+.form-error {
+  padding: 12px;
+  border-radius: 6px;
+  background-color: #fee2e2;
+  color: #991b1b;
+  font-size: 14px;
+}
+
+.request-form__actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

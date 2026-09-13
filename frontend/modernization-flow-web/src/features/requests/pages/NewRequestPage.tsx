@@ -1,13 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from 'react-router-dom'
+//import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import {
   createRequestSchema,
   type CreateRequestFormData,
 } from '../schemas/createRequestSchema'
 import './NewRequestPage.css'
+import { Link, useNavigate } from 'react-router-dom'
+import { useCreateRequest } from '../api/useCreateRequest'
+
 
 export function NewRequestPage() {
+  const navigate = useNavigate()
+  const createRequest = useCreateRequest()
+
   const {
     register,
     handleSubmit,
@@ -16,8 +22,17 @@ export function NewRequestPage() {
     resolver: zodResolver(createRequestSchema),
   })
 
+
+
+  // function onSubmit(data: CreateRequestFormData) {
+  //   console.log(data)
+  // }
   function onSubmit(data: CreateRequestFormData) {
-    console.log(data)
+    createRequest.mutate(data, {
+      onSuccess: () => {
+        navigate('/requests')
+      },
+    })
   }
 
   return (
@@ -88,9 +103,18 @@ export function NewRequestPage() {
           )}
         </div>
 
+        {createRequest.isError && (
+          <div className="form-error">
+            Não foi possível salvar a solicitação.
+          </div>
+        )}
+
         <div className="request-form__actions">
-          <button type="submit">
-            Salvar
+          <button
+            type="submit"
+            disabled={createRequest.isPending}
+          >
+            {createRequest.isPending ? 'Salvando...' : 'Salvar'}
           </button>
         </div>
       </form>
