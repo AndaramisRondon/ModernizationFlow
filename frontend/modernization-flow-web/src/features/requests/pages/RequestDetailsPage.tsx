@@ -1,5 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { useRequest } from '../api/useRequest'
+import { useSubmitRequest } from '../api/useSubmitRequest'
+import { confirmDialog } from '../../../components/common/dialogs/confirmDialog'
 import './RequestDetailsPage.css'
 
 function formatAmount(amount: number) {
@@ -24,6 +26,26 @@ export function RequestDetailsPage() {
     isLoading,
     isError,
   } = useRequest(id ?? '')
+  
+  const submitRequest = useSubmitRequest()
+  
+  async function handleSubmitRequest() {
+    if (!id) {
+      return
+    }
+
+    const confirmed = await confirmDialog({
+      title: 'Enviar para análise?',
+      text: 'A solicitação será enviada para análise e não poderá mais ser editada.',
+      confirmText: 'Sim, enviar',
+    })
+
+    if (!confirmed) {
+      return
+    }
+
+    submitRequest.mutate(id)
+  }
 
   if (!id) {
     return <p>Solicitação inválida.</p>
@@ -44,12 +66,25 @@ export function RequestDetailsPage() {
 
         <div className="request-details-page__actions">
           {request.status === 'Draft' && (
-            <Link
-              to={`/requests/${request.id}/edit`}
-              className="request-details-page__edit"
-            >
-              Editar
-            </Link>
+            <>
+              <Link
+                to={`/requests/${request.id}/edit`}
+                className="request-details-page__edit"
+              >
+                Editar
+              </Link>
+
+              <button
+                type="button"
+                className="request-details-page__submit"
+                disabled={submitRequest.isPending}
+                onClick={handleSubmitRequest}
+              >
+                {submitRequest.isPending
+                  ? 'Enviando...'
+                  : 'Enviar para análise'}
+              </button>
+            </>
           )}
 
           <Link
@@ -59,7 +94,15 @@ export function RequestDetailsPage() {
             Voltar
           </Link>
         </div>
+
       </div>
+
+      {submitRequest.isError && (
+        <div className="request-details-page__error">
+          Não foi possível enviar a solicitação para análise.
+        </div>
+      )}
+
       <div className="request-details">
         <div className="request-details__field">
           <span className="request-details__label">

@@ -64,3 +64,31 @@
 .request-details-page__edit:hover {
   background-color: #374151;
 }
+
+.request-details-page__submit {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #2563eb;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.request-details-page__submit:hover {
+  background-color: #1d4ed8;
+}
+
+.request-details-page__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.request-details-page__error {
+  padding: 12px;
+  border-radius: 6px;
+  background-color: #fee2e2;
+  color: #991b1b;
+  font-size: 14px;
+}
