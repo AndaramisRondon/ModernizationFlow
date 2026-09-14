@@ -3,6 +3,7 @@ import { confirmDialog } from '../../../components/common/dialogs/confirmDialog'
 import { useRequest } from '../api/useRequest'
 import { useSubmitRequest } from '../api/useSubmitRequest'
 import { useApproveRequest } from '../api/useApproveRequest'
+import { useRejectRequest } from '../api/useRejectRequest'
 import './RequestDetailsPage.css'
 
 function formatAmount(amount: number) {
@@ -30,6 +31,7 @@ export function RequestDetailsPage() {
   
   const submitRequest = useSubmitRequest()
   const approveRequest = useApproveRequest()
+  const rejectRequest = useRejectRequest()
 
   async function handleSubmitRequest() {
     if (!id) {
@@ -67,6 +69,24 @@ export function RequestDetailsPage() {
     approveRequest.mutate(id)
   }
 
+  async function handleRejectRequest() {
+    if (!id) {
+      return
+    }
+
+    const confirmed = await confirmDialog({
+      title: 'Reprovar solicitação?',
+      text: 'A solicitação será reprovada.',
+      confirmText: 'Sim, reprovar',
+    })
+
+    if (!confirmed) {
+      return
+    }
+
+    rejectRequest.mutate(id)
+  }
+
   if (!id) {
     return <p>Solicitação inválida.</p>
   }
@@ -87,16 +107,35 @@ export function RequestDetailsPage() {
         <div className="request-details-page__actions">
 
           {request.status === 'UnderReview' && (
-            <button
-              type="button"
-              className="request-details-page__approve"
-              disabled={approveRequest.isPending}
-              onClick={handleApproveRequest}
-            >
-              {approveRequest.isPending
-                ? 'Aprovando...'
-                : 'Aprovar'}
-            </button>
+            <>
+              <button
+                type="button"
+                className="request-details-page__approve"
+                disabled={
+                  approveRequest.isPending ||
+                  rejectRequest.isPending
+                }
+                onClick={handleApproveRequest}
+              >
+                {approveRequest.isPending
+                  ? 'Aprovando...'
+                  : 'Aprovar'}
+              </button>
+
+              <button
+                type="button"
+                className="request-details-page__reject"
+                disabled={
+                  approveRequest.isPending ||
+                  rejectRequest.isPending
+                }
+                onClick={handleRejectRequest}
+              >
+                {rejectRequest.isPending
+                  ? 'Reprovando...'
+                  : 'Reprovar'}
+              </button>
+            </>
           )}
 
           {request.status === 'Draft' && (
@@ -142,6 +181,12 @@ export function RequestDetailsPage() {
           Não foi possível aprovar a solicitação.
         </div>
       )}
+
+      {rejectRequest.isError && (
+        <div className="request-details-page__error">
+          Não foi possível reprovar a solicitação.
+        </div>
+      )}      
 
       <div className="request-details">
         <div className="request-details__field">

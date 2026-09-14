@@ -112,3 +112,23 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.request-details-page__reject {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #b91c1c;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.request-details-page__reject:hover {
+  background-color: #991b1b;
+}
+
+.request-details-page__reject:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
