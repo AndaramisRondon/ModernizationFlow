@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useRequest } from '../api/useRequest'
 import {
   requestFormSchema,
@@ -9,8 +9,13 @@ import {
 } from '../schemas/requestFormSchema'
 import './NewRequestPage.css'
 
+import { useUpdateRequest } from '../api/useUpdateRequest'
+
 export function EditRequestPage() {
   const { id } = useParams<{ id: string }>()
+
+  const navigate = useNavigate()
+  const updateRequest = useUpdateRequest()
 
   const {
     data: request,
@@ -39,7 +44,21 @@ export function EditRequestPage() {
   }, [request, reset])
 
   function onSubmit(data: RequestFormData) {
-    console.log(data)
+    if (!id) {
+      return
+    }
+
+    updateRequest.mutate(
+      {
+        id,
+        request: data,
+      },
+      {
+        onSuccess: () => {
+          navigate(`/requests/${id}`)
+        },
+      },
+    )
   }
 
   if (!id) {
@@ -142,9 +161,18 @@ export function EditRequestPage() {
           )}
         </div>
 
+        {updateRequest.isError && (
+          <div className="form-error">
+            Não foi possível salvar as alterações.
+          </div>
+        )}
+
         <div className="request-form__actions">
-          <button type="submit">
-            Salvar
+          <button
+            type="submit"
+            disabled={updateRequest.isPending}
+          >
+            {updateRequest.isPending ? 'Salvando...' : 'Salvar'}
           </button>
         </div>
       </form>
