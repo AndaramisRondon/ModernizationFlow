@@ -92,3 +92,23 @@
   color: #991b1b;
   font-size: 14px;
 }
+
+.request-details-page__approve {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #15803d;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.request-details-page__approve:hover {
+  background-color: #166534;
+}
+
+.request-details-page__approve:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

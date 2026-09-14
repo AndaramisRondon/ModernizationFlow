@@ -1,7 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
+import { confirmDialog } from '../../../components/common/dialogs/confirmDialog'
 import { useRequest } from '../api/useRequest'
 import { useSubmitRequest } from '../api/useSubmitRequest'
-import { confirmDialog } from '../../../components/common/dialogs/confirmDialog'
+import { useApproveRequest } from '../api/useApproveRequest'
 import './RequestDetailsPage.css'
 
 function formatAmount(amount: number) {
@@ -28,7 +29,8 @@ export function RequestDetailsPage() {
   } = useRequest(id ?? '')
   
   const submitRequest = useSubmitRequest()
-  
+  const approveRequest = useApproveRequest()
+
   async function handleSubmitRequest() {
     if (!id) {
       return
@@ -45,6 +47,24 @@ export function RequestDetailsPage() {
     }
 
     submitRequest.mutate(id)
+  }
+
+  async function handleApproveRequest() {
+    if (!id) {
+      return
+    }
+
+    const confirmed = await confirmDialog({
+      title: 'Aprovar solicitação?',
+      text: 'A solicitação será aprovada.',
+      confirmText: 'Sim, aprovar',
+    })
+
+    if (!confirmed) {
+      return
+    }
+
+    approveRequest.mutate(id)
   }
 
   if (!id) {
@@ -65,6 +85,20 @@ export function RequestDetailsPage() {
         <h1>Detalhes da Solicitação</h1>
 
         <div className="request-details-page__actions">
+
+          {request.status === 'UnderReview' && (
+            <button
+              type="button"
+              className="request-details-page__approve"
+              disabled={approveRequest.isPending}
+              onClick={handleApproveRequest}
+            >
+              {approveRequest.isPending
+                ? 'Aprovando...'
+                : 'Aprovar'}
+            </button>
+          )}
+
           {request.status === 'Draft' && (
             <>
               <Link
@@ -100,6 +134,12 @@ export function RequestDetailsPage() {
       {submitRequest.isError && (
         <div className="request-details-page__error">
           Não foi possível enviar a solicitação para análise.
+        </div>
+      )}
+
+      {approveRequest.isError && (
+        <div className="request-details-page__error">
+          Não foi possível aprovar a solicitação.
         </div>
       )}
 
