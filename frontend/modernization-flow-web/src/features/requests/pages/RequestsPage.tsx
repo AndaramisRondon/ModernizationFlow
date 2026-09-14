@@ -92,7 +92,7 @@ export function RequestsPage() {
 
                 <td>
                   <span className={getStatusClass(request.status)}>
-                    {request.status}
+                    {request.statusDescription}
                   </span>
                 </td>
 

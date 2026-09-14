@@ -218,7 +218,7 @@ export function RequestDetailsPage() {
             Status
           </span>
 
-          <span>{request.status}</span>
+          <span>{request.statusDescription}</span>
         </div>
 
         <div className="request-details__field">

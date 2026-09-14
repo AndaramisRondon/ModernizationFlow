@@ -4,6 +4,7 @@ export type Request = {
   description: string
   amount: number
   status: string
+  statusDescription: string
   createdAt: string
   updatedAt: string | null
 }
