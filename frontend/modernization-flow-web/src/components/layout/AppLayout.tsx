@@ -16,7 +16,7 @@ export function AppLayout() {
               isActive ? 'app-nav__link active' : 'app-nav__link'
             }
           >
-            Home
+            Inicio
           </NavLink>
 
           <NavLink
@@ -25,7 +25,7 @@ export function AppLayout() {
               isActive ? 'app-nav__link active' : 'app-nav__link'
             }
           >
-            Requests
+            Solicitações
           </NavLink>
         </nav>
       </header>
