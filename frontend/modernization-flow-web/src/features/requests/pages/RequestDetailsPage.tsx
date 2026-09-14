@@ -42,14 +42,24 @@ export function RequestDetailsPage() {
       <div className="request-details-page__header">
         <h1>Detalhes da Solicitação</h1>
 
-        <Link
-          to="/requests"
-          className="request-details-page__back"
-        >
-          Voltar
-        </Link>
-      </div>
+        <div className="request-details-page__actions">
+          {request.status === 'Draft' && (
+            <Link
+              to={`/requests/${request.id}/edit`}
+              className="request-details-page__edit"
+            >
+              Editar
+            </Link>
+          )}
 
+          <Link
+            to="/requests"
+            className="request-details-page__back"
+          >
+            Voltar
+          </Link>
+        </div>
+      </div>
       <div className="request-details">
         <div className="request-details__field">
           <span className="request-details__label">

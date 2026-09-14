@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const createRequestSchema = z.object({
+export const requestFormSchema = z.object({
   title: z
     .string()
     .min(1, 'O título é obrigatório.'),
@@ -16,5 +16,5 @@ export const createRequestSchema = z.object({
     .positive('O valor deve ser maior que zero.'),
 })
 
-export type CreateRequestFormData =
-  z.infer<typeof createRequestSchema>
+export type RequestFormData =
+  z.infer<typeof requestFormSchema>

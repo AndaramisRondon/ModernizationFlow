@@ -4,7 +4,7 @@ import { HomePage } from '../pages/HomePage'
 import { RequestsPage } from '../features/requests/pages/RequestsPage'
 import { NewRequestPage } from '../features/requests/pages/NewRequestPage'
 import { RequestDetailsPage } from '../features/requests/pages/RequestDetailsPage'
-
+import { EditRequestPage } from '../features/requests/pages/EditRequestPage'
 export function AppRoutes() {
   return (
     <BrowserRouter>
@@ -17,7 +17,10 @@ export function AppRoutes() {
               path="/requests/:id"
               element={<RequestDetailsPage />}
             />
-                      
+          <Route
+            path="/requests/:id/edit"
+            element={<EditRequestPage />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

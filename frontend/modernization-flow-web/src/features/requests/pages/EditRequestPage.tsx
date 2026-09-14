@@ -1,47 +1,80 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-//import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { Link, useParams } from 'react-router-dom'
+import { useRequest } from '../api/useRequest'
 import {
   requestFormSchema,
   type RequestFormData,
 } from '../schemas/requestFormSchema'
 import './NewRequestPage.css'
-import { Link, useNavigate } from 'react-router-dom'
-import { useCreateRequest } from '../api/useCreateRequest'
 
+export function EditRequestPage() {
+  const { id } = useParams<{ id: string }>()
 
-export function NewRequestPage() {
-  const navigate = useNavigate()
-  const createRequest = useCreateRequest()
+  const {
+    data: request,
+    isLoading,
+    isError,
+  } = useRequest(id ?? '')
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RequestFormData>({
     resolver: zodResolver(requestFormSchema),
+    mode: 'onBlur',
   })
 
+  useEffect(() => {
+    if (request) {
+      reset({
+        title: request.title,
+        description: request.description,
+        amount: request.amount,
+      })
+    }
+  }, [request, reset])
 
-
-  // function onSubmit(data: CreateRequestFormData) {
-  //   console.log(data)
-  // }
   function onSubmit(data: RequestFormData) {
-    createRequest.mutate(data, {
-      onSuccess: () => {
-        navigate('/requests')
-      },
-    })
+    console.log(data)
+  }
+
+  if (!id) {
+    return <p>Solicitação inválida.</p>
+  }
+
+  if (isLoading) {
+    return <p>Carregando solicitação...</p>
+  }
+
+  if (isError || !request) {
+    return <p>Não foi possível carregar a solicitação.</p>
+  }
+
+  if (request.status !== 'Draft') {
+    return (
+      <section>
+        <p>
+          Apenas solicitações em rascunho podem ser editadas.
+        </p>
+
+        <Link to={`/requests/${id}`}>
+          Voltar
+        </Link>
+      </section>
+    )
   }
 
   return (
     <section className="request-form-page">
       <div className="request-form-page__header">
-        <h1>Nova Solicitação</h1>
+        <h1>Editar Solicitação</h1>
 
         <Link
-          to="/requests"
+          to={`/requests/${id}`}
           className="request-form-page__back"
         >
           Voltar
@@ -53,7 +86,9 @@ export function NewRequestPage() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="form-field">
-          <label htmlFor="title">Título</label>
+          <label htmlFor="title">
+            Título
+          </label>
 
           <input
             id="title"
@@ -69,7 +104,9 @@ export function NewRequestPage() {
         </div>
 
         <div className="form-field">
-          <label htmlFor="description">Descrição</label>
+          <label htmlFor="description">
+            Descrição
+          </label>
 
           <textarea
             id="description"
@@ -85,7 +122,9 @@ export function NewRequestPage() {
         </div>
 
         <div className="form-field">
-          <label htmlFor="amount">Valor</label>
+          <label htmlFor="amount">
+            Valor
+          </label>
 
           <input
             id="amount"
@@ -103,18 +142,9 @@ export function NewRequestPage() {
           )}
         </div>
 
-        {createRequest.isError && (
-          <div className="form-error">
-            Não foi possível salvar a solicitação.
-          </div>
-        )}
-
         <div className="request-form__actions">
-          <button
-            type="submit"
-            disabled={createRequest.isPending}
-          >
-            {createRequest.isPending ? 'Salvando...' : 'Salvar'}
+          <button type="submit">
+            Salvar
           </button>
         </div>
       </form>
